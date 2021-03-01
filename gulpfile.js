@@ -36,11 +36,16 @@ function images() {
 }
 
 function scripts() {
-  return src([
-    'node_modules/jquery/dist/jquery.js',
-    'app/js/main.js'
-  ])
+  return src('app/js/main.js')
   .pipe(concat('main.min.js'))
+  .pipe(uglify())
+  .pipe(dest('app/js'))
+  .pipe(browserSync.stream())
+}
+
+function js() {
+  return src('node_modules/slick-carousel/slick/slick.js')
+  .pipe(concat('libs.min.js'))
   .pipe(uglify())
   .pipe(dest('app/js'))
   .pipe(browserSync.stream())
@@ -94,4 +99,4 @@ exports.images = images;
 exports.cleanDist = cleanDist;
 
 exports.build = series(cleanDist, images, build);
-exports.default = parallel(css, styles, scripts, browsersync, watching);
+exports.default = parallel(css, js, styles, scripts, browsersync, watching);
