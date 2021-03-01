@@ -59,6 +59,16 @@ function styles() {
     .pipe(browserSync.stream())
 }
 
+function css() {
+  return src([
+    'node_modules/normalize.css/normalize.css',
+    'node_modules/slick-carousel/slick/slick.css'
+  ])
+  .pipe(concat('_libs.scss'))
+  .pipe(dest('app/scss'))
+  .pipe(browserSync.stream())
+}
+
 function build() {
   return src([
     'app/css/style.min.css',
@@ -75,6 +85,7 @@ function watching() {
   watch(['app/*.html']).on('change', browserSync.reload);
 }
 
+exports.css = css;
 exports.styles = styles;
 exports.watching = watching;
 exports.browsersync = browsersync;
@@ -83,4 +94,4 @@ exports.images = images;
 exports.cleanDist = cleanDist;
 
 exports.build = series(cleanDist, images, build);
-exports.default = parallel(styles, scripts, browsersync, watching);
+exports.default = parallel(css, styles, scripts, browsersync, watching);
